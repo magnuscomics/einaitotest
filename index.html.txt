@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nimfes</title>
+</head>
+<body>
+<nav>
+<a href="index.html">Home</a> |
+<a href="comic1.html">Nimfes</a> |
+<a href="comic2.html">DND</a> |
+<a href="social.html">Social</a>
+</nav>
+
+<hr>
+<h1>My Webcomic</h1>
+
+<p>Welcome to my comic!</p>
+
+<img src="home.png" width="800">
+
+</body>
+</html>
