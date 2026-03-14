@@ -1,22 +1,234 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Nimfes</title>
+  <title>Home</title>
+ <style>
+/* --- Body and general styling --- */
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #000000;  /* black background */
+    color: #ffffff;             /* white text */
+    margin: 0;
+    padding: 0;
+    position: relative;         /* for absolute/fixed elements */
+}
+
+/* Header container */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    min-height: 210px; /* ensures space for the GIF */
+}
+
+/* GIF on the left */
+#topGif {
+    position: absolute;
+    left: 10px;
+    width: 200px;
+}
+
+/* Title centered */
+#titleImage {
+    width: 300px;
+}
+/* --- Navigation bar --- */
+nav {
+    display: flex;
+    justify-content: space-between; /* spread buttons */
+    width: 100%;
+    background-color: #555555;
+    border-radius: 8px;
+    margin-top: 0px;       /* push menu below GIF */
+    padding: 0;
+    position: relative;       /* below GIF in stacking */
+    z-index: 1;
+}
+
+/* --- Menu buttons --- */
+nav a, .dropbtn {
+    flex: 1;                         /* equal width */
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #777777, #444444);  /* glossy */
+    padding: 25px 0;                  /* desktop height */
+    font-size: 36px;                  /* desktop font */
+    border-radius: 0;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Rounded corners at ends */
+nav a:first-child, .dropbtn:first-child { 
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+nav a:last-child, .dropbtn:last-child { 
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Hover effect */
+nav a:hover, .dropbtn:hover {
+    background: linear-gradient(to bottom, #990000, #660000);  /* dark red */
+    box-shadow: 0 6px 8px rgba(0,0,0,0.5);
+}
+
+/* --- Comic 1 drop-down (fixed top-left) --- */
+.dropdown {
+    position: fixed;      /* fixed to screen */
+    top: 0;
+    left: 0;
+    width: 200px;         /* adjust width */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 1000;        /* above other elements */
+    display: none;         /* hidden by default */
+    flex-direction: column; /* stack items vertically */
+}
+
+/* Drop-down links */
+.dropdown-content a {
+    display: block;
+    padding: 12px;
+    text-align: left;
+    color: #000000;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+}
+
+/* Remove border on last item */
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+/* Hover effect for drop-down */
+.dropdown-content a:hover {
+    background-color: #f2f2f2;
+}
+
+/* Show drop-down on hover */
+.dropdown:hover {
+    display: flex;
+}
+
+/* --- Images --- */
+img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- Mobile / small screen adjustments --- */
+@media (max-width: 600px) {
+    nav a, .dropbtn {
+        padding: 42px 0;    /* taller buttons */
+        font-size: 65px;    /* larger text */
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    nav {
+        flex-direction: column;  /* stack menu vertically */
+        margin-top: 0px;       /* adjust so menu stays below GIF on phones */
+    }
+}
+</style>
 </head>
+
+<div class="header">
+    <img src="sprite_0..gif" id="topGif" alt="Animated Header" draggable="false">
+    <img src="title.png" id="titleImage" alt="Site Title" draggable="false">
+</div>
+  
 <body>
-<nav>
-<a href="index.html">Home</a> |
-<a href="comic1.html">Nimfes</a> |
-<a href="comic2.html">DND</a> |
-<a href="social.html">Social</a>
-</nav>
+  <!-- Navigation menu -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="comic1.html">Nimfes</a>
+    <a href="comic2.html">DND</a>
+    <a href="social.html">Social</a>
+  </nav>
 
-<hr>
-<h1>My Webcomic</h1>
+  <h1>Welcome to My Webcomic!</h1>
+  <img src="home.png" width="800" draggable="false">
+  <p>Click above to start reading the comics!</p>
 
-<p>Welcome to my comic!</p>
 
-<img src="home.png" width="800">
+ <audio autoplay loop hidden>
+  <source src="ΖΝ.mp3" type="audio/mpeg">
+</audio>
 
+
+  <script>
+document.addEventListener("contextmenu", function(e) {
+    if (e.target.tagName === "IMG") {
+        e.preventDefault();
+    }
+});
+</script>
+
+  
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
