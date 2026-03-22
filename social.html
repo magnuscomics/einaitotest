@@ -22,14 +22,14 @@ body {
     position: relative;
     padding-top: 10px;
     margin-bottom: 10px;
-    min-height: 220px; /* ensures space for the GIF */
+    min-height: 210px; /* ensures space for the GIF */
 }
 
 /* GIF on the left */
 #topGif {
     position: absolute;
     left: 10px;
-    width: 305px;
+    width: 145px;
 }
 
 /* Title centered */
@@ -84,7 +84,7 @@ nav a:hover, .dropbtn:hover {
     position: fixed;      /* fixed to screen */
     top: 0;
     left: 0;
-    width: 200px;         /* adjust width */
+    width: 160px;         /* adjust width */
     background-color: #ffffff;
     border: 1px solid #ccc;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -147,7 +147,7 @@ img {
 </head>
 
 <div class="header">
-    <img src="sprite_0c8*.gif" id="topGif" alt="Animated Header" draggable="false">
+    <img src="sprite_00g.gif" id="topGif" alt="Animated Header" draggable="false">
     <img src="title.png" id="titleImage" alt="Site Title" draggable="false">
 </div>
   
@@ -165,10 +165,19 @@ img {
 <h1>Fb!</h1>
 
   
+
+  <script>
+document.addEventListener("contextmenu", function(e) {
+    if (e.target.tagName === "IMG") {
+        e.preventDefault();
+    }
+});
+</script>  
+
+
+  
 </body>
 </html>
-
-
 
 
 
