@@ -101,6 +101,29 @@ nav a:last-child {
 }
 
 /* Dropdown menu */
+/* --- Dropdown container --- */
+.dropdown {
+    position: relative;
+    flex: 1;
+    display: flex;
+}
+
+/* --- Nimfes button --- */
+.dropbtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #777777, #444444);
+    padding: 25px 0;
+    font-size: 36px;
+    transition: 0.3s;
+    border-radius: 0; /* IMPORTANT: keeps it consistent */
+}
+
+/* --- Dropdown menu box --- */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -109,19 +132,32 @@ nav a:last-child {
     width: 100%;
     background-color: white;
     z-index: 999;
+
     flex-direction: column;
+
+    border-radius: 0 0 8px 8px; /* smooth bottom corners */
+    overflow: hidden;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-/* Items */
+/* --- Dropdown links --- */
 .dropdown-content a {
     display: block;
     padding: 12px;
     color: black;
     text-decoration: none;
+    border-radius: 0;
 }
 
+/* Hover effect */
 .dropdown-content a:hover {
     background-color: #eeeeee;
+}
+
+/* --- Show dropdown on hover --- */
+.dropdown:hover .dropdown-content {
+    display: flex;
 }
 
 /* Show on hover */
