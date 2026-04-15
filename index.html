@@ -2,19 +2,20 @@
 <html>
 <head>
   <title>Home</title>
- <style>
-/* --- Body and general styling --- */
+
+<style>
+
+/* --- Body --- */
 body {
     text-align: center;
     font-family: Arial, sans-serif;
-    background-color: #000000;  /* black background */
-    color: #ffffff;             /* white text */
+    background-color: #000000;
+    color: #ffffff;
     margin: 0;
     padding: 0;
-    position: relative;         /* for absolute/fixed elements */
 }
 
-/* Header container */
+/* --- Header --- */
 .header {
     display: flex;
     align-items: center;
@@ -22,107 +23,131 @@ body {
     position: relative;
     padding-top: 10px;
     margin-bottom: 10px;
-    min-height: 220px; /* ensures space for the GIF */
+    min-height: 220px;
 }
 
-/* GIF on the left */
 #topGif {
     position: absolute;
     left: 10px;
+    top: 10px;
     width: 200px;
 }
 
-/* Title centered */
 #titleImage {
     width: 300px;
 }
-/* --- Navigation bar --- */
+
+/* --- NAV --- */
 nav {
     display: flex;
-    justify-content: space-between; /* spread buttons */
     width: 100%;
     background-color: #555555;
     border-radius: 8px;
-    margin-top: 0px;       /* push menu below GIF */
-    padding: 0;
-    position: relative;       /* below GIF in stacking */
-    z-index: 1;
 }
 
-/* --- Menu buttons --- */
+/* Buttons */
 nav a, .dropbtn {
-    flex: 1;                         /* equal width */
+    flex: 1;
     text-align: center;
     text-decoration: none;
     color: #ffffff;
-    background: linear-gradient(to bottom, #777777, #444444);  /* glossy */
-    padding: 25px 0;                  /* desktop height */
-    font-size: 36px;                  /* desktop font */
-    border-radius: 0;
-    transition: all 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    background: linear-gradient(to bottom, #777777, #444444);
+    padding: 25px 0;
+    font-size: 36px;
+    transition: 0.3s;
 }
 
-/* Rounded corners at ends */
-nav a:first-child, .dropbtn:first-child { 
+/* Hover */
+nav a:hover, .dropbtn:hover {
+    background: linear-gradient(to bottom, #990000, #660000);
+}
+
+/* Rounded edges */
+nav a:first-child {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
-nav a:last-child, .dropbtn:last-child { 
+nav a:last-child {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
-/* Hover effect */
-nav a:hover, .dropbtn:hover {
-    background: linear-gradient(to bottom, #990000, #660000);  /* dark red */
-    box-shadow: 0 6px 8px rgba(0,0,0,0.5);
+/* --- DROPDOWN --- */
+.dropdown {
+    position: relative;
+    flex: 1;
 }
 
+/* Hidden menu */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 999;
+    flex-direction: column;
+}
 
+/* Items */
+.dropdown-content a {
+    display: block;
+    padding: 12px;
+    color: black;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #eeeeee;
+}
+
+/* Show dropdown */
+.dropdown:hover .dropdown-content {
+    display: flex;
+}
 
 /* --- Images --- */
 img {
     max-width: 90%;
     height: auto;
-    display: block;
-    margin: 0 auto;
 }
 
-/* --- Mobile / small screen adjustments --- */
+/* --- Mobile --- */
 @media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+    }
+
     nav a, .dropbtn {
-        padding: 42px 0;    /* taller buttons */
-        font-size: 65px;    /* larger text */
+        padding: 40px 0;
+        font-size: 50px;
     }
 
     img {
         width: 100%;
-        height: auto;
-    }
-
-    nav {
-        flex-direction: column;  /* stack menu vertically */
-        margin-top: 0px;       /* adjust so menu stays below GIF on phones */
     }
 }
+
 </style>
 </head>
 
-<div class="header">
-    <img src="sprite_0..gif" id="topGif" alt="Animated Header" draggable="false">
-    <img src="title.png" id="titleImage" alt="Site Title" draggable="false">
-</div>
-  
 <body>
-  <!-- Navigation menu -->
+
+<!-- HEADER -->
+<div class="header">
+    <img src="sprite_0..gif" id="topGif" draggable="false">
+    <img src="title.png" id="titleImage" draggable="false">
+</div>
+
+<!-- NAV -->
 <nav>
     <a href="index.html">Home</a>
 
     <div class="dropdown">
-        <a class="dropbtn">Nimfes</a>
+        <a class="dropbtn" href="comic1.html">Nimfes</a>
         <div class="dropdown-content">
-            <a href="comic1issue1.html">Issue 1</a>
+            <a href="comic1_issue1.html">Issue 1</a>
             <a href="comic1_issue2.html">Issue 2</a>
         </div>
     </div>
@@ -131,17 +156,19 @@ img {
     <a href="social.html">Social</a>
 </nav>
 
-  <h1>Welcome to My Webcomic!</h1>
-  <img src="home.png" width="800" draggable="false">
-  <p>Click above to start reading the comics!</p>
+<h1>Welcome to My Webcomic!</h1>
 
+<img src="home.png" width="800" draggable="false">
 
- <audio autoplay loop hidden>
-  <source src="ΖΝ.mp3" type="audio/mpeg">
+<p>Click above to start reading the comics!</p>
+
+<!-- MUSIC -->
+<audio autoplay loop hidden>
+  <source src="ZN.mp3" type="audio/mpeg">
 </audio>
 
-
-  <script>
+<!-- Disable right click on images -->
+<script>
 document.addEventListener("contextmenu", function(e) {
     if (e.target.tagName === "IMG") {
         e.preventDefault();
@@ -149,57 +176,5 @@ document.addEventListener("contextmenu", function(e) {
 });
 </script>
 
-  
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
