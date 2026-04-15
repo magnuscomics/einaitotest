@@ -81,16 +81,19 @@ nav a:hover, .dropbtn:hover {
 
 /* --- Comic 1 drop-down (fixed top-left) --- */
 .dropdown {
-    position: fixed;      /* fixed to screen */
-    top: 0;
+    position: relative;
+    flex: 1;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
     left: 0;
-    width: 200px;         /* adjust width */
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 1000;        /* above other elements */
-    display: none;         /* hidden by default */
-    flex-direction: column; /* stack items vertically */
+    width: 100%;
+    background-color: white;
+    z-index: 999;
+}
 }
 
 /* Drop-down links */
@@ -153,12 +156,20 @@ img {
   
 <body>
   <!-- Navigation menu -->
-  <nav>
+ <nav>
     <a href="index.html">Home</a>
-    <a href="comic1.html">Nimfes</a>
+
+    <div class="dropdown">
+        <a class="dropbtn" href="comic1.html">Nimfes</a>
+        <div class="dropdown-content">
+            <a href="comic1issue1.html">Issue 1</a>
+            <a href="comic1_issue2.html">Issue 2</a>
+        </div>
+    </div>
+
     <a href="comic2.html">DND</a>
     <a href="social.html">Social</a>
-  </nav>
+</nav>
 
   <h1>Welcome to My Webcomic!</h1>
   <img src="home.png" width="800" draggable="false">
