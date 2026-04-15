@@ -79,12 +79,28 @@ nav a:last-child {
 }
 
 /* --- DROPDOWN --- */
+/* --- DROPDOWN --- */
 .dropdown {
     position: relative;
     flex: 1;
+    display: flex; /* makes it behave like other buttons */
 }
 
-/* Hidden menu */
+/* Button */
+.dropbtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #777777, #444444);
+    padding: 25px 0;
+    font-size: 36px;
+    transition: 0.3s;
+}
+
+/* Dropdown menu */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -108,7 +124,7 @@ nav a:last-child {
     background-color: #eeeeee;
 }
 
-/* Show dropdown */
+/* Show on hover */
 .dropdown:hover .dropdown-content {
     display: flex;
 }
