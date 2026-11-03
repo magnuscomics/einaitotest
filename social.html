@@ -76,7 +76,7 @@ header {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
-    border: 2px solid #333;
+    border: none;
 }
 
 /* CHARACTER OPTIONS */
@@ -92,6 +92,14 @@ header {
     transition: 0.15s;
 }
 
+/* LEFT COLUMN OFFSET */
+
+.character-option:nth-child(odd) {
+    transform: translateY(50%);
+}
+
+/* PORTRAIT IMAGES */
+
 .character-option img {
     width: 100%;
     height: 100%;
@@ -100,12 +108,16 @@ header {
     transition: 0.2s;
 }
 
-.character-option:hover {
-    border: 2px solid #a00000;
+/* HOVER AND SELECTION */
+
+.character-option:hover,
+.character-option.selected {
+    outline: 2px solid #a00000;
     z-index: 2;
 }
 
-.character-option:hover img {
+.character-option:hover img,
+.character-option.selected img {
     filter: grayscale(0%) brightness(1);
 }
 
@@ -196,29 +208,24 @@ header {
 
     <div class="roster">
 
-        <div class="character-option"
-             onmouseenter="showCharacter(1)">
-            <img src="characters/character1.png">
+        <div class="character-option selected">
+            <img src="characters/character1.png" alt="Character 1">
         </div>
 
-        <div class="character-option"
-             onmouseenter="showCharacter(2)">
-            <img src="characters/character2.png">
+        <div class="character-option">
+            <img src="characters/character2.png" alt="Character 2">
         </div>
 
-        <div class="character-option"
-             onmouseenter="showCharacter(3)">
-            <img src="characters/character3.png">
+        <div class="character-option">
+            <img src="characters/character3.png" alt="Character 3">
         </div>
 
-        <div class="character-option"
-             onmouseenter="showCharacter(4)">
-            <img src="characters/character4.png">
+        <div class="character-option">
+            <img src="characters/character4.png" alt="Character 4">
         </div>
 
-        <div class="character-option"
-             onmouseenter="showCharacter(5)">
-            <img src="characters/character5.png">
+        <div class="character-option">
+            <img src="characters/character5.png" alt="Character 5">
         </div>
 
         <!-- EMPTY SIXTH SLOT -->
@@ -232,7 +239,7 @@ header {
 
 <script>
 
-// CHARACTER NAMES
+/* CHARACTER INFORMATION */
 
 const names = [
     "Character 1",
@@ -242,11 +249,18 @@ const names = [
     "Character 5"
 ];
 
-// CHANGE CHARACTER PREVIEW
+let currentCharacter = 1;
+
+
+/* CHANGE CHARACTER PREVIEW */
 
 function showCharacter(number) {
 
-    // Hide every character
+    if (number < 1 || number > 5) return;
+
+    currentCharacter = number;
+
+    // Hide all previews
     document.querySelectorAll(".character-display img")
         .forEach(image => {
             image.classList.remove("active");
@@ -260,7 +274,68 @@ function showCharacter(number) {
     document.getElementById("characterName").textContent =
         names[number - 1];
 
+    // Update highlighted portrait
+    document.querySelectorAll(".character-option")
+        .forEach((option, index) => {
+            option.classList.toggle(
+                "selected",
+                index === number - 1
+            );
+        });
 }
+
+
+/* MOUSE NAVIGATION */
+
+document.querySelectorAll(".character-option")
+    .forEach((option, index) => {
+
+        option.addEventListener("mouseenter", () => {
+            showCharacter(index + 1);
+        });
+
+    });
+
+
+/* KEYBOARD NAVIGATION */
+
+document.addEventListener("keydown", function(event) {
+
+    let next = currentCharacter;
+
+    switch(event.key) {
+
+        case "ArrowRight":
+            next = currentCharacter % 2 === 1
+                ? currentCharacter + 1
+                : currentCharacter;
+            break;
+
+        case "ArrowLeft":
+            next = currentCharacter % 2 === 0
+                ? currentCharacter - 1
+                : currentCharacter;
+            break;
+
+        case "ArrowDown":
+            next = currentCharacter + 2;
+            break;
+
+        case "ArrowUp":
+            next = currentCharacter - 2;
+            break;
+
+        default:
+            return;
+    }
+
+    event.preventDefault();
+
+    if (next >= 1 && next <= 5) {
+        showCharacter(next);
+    }
+
+});
 
 </script>
 
