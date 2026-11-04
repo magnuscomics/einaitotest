@@ -17,7 +17,7 @@
 
 body {
     margin: 0;
-    background: #000000;
+    background: #000;
     color: white;
     font-family: Arial, sans-serif;
     overflow-x: hidden;
@@ -42,20 +42,30 @@ header {
     align-items: center;
     justify-content: space-around;
     padding: 30px;
+    gap: 30px;
 }
 
 /* CHARACTER DISPLAY */
 
+.character-display {
+    position: relative;
+    width: 65%;
+    height: 75vh;
+    flex: 1;
+}
+
 .character-display img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
@@ -64,10 +74,25 @@ header {
 .character-display img.active {
     opacity: 1;
 }
+
+/* CHARACTER NAME */
+
+.character-name {
+    position: absolute;
+    bottom: 20px;
+    left: 40px;
+    font-size: 32px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px black;
+    z-index: 3;
+}
+
 /* CHARACTER ROSTER */
 
 .roster {
     width: 300px;
+    flex-shrink: 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
@@ -121,18 +146,23 @@ header {
 .empty-slot {
     background: #080808;
     border: 1px solid #292929;
+    aspect-ratio: 1 / 1;
 }
 
-/* CHARACTER NAME */
+/* BOTTOM BAR */
 
-.character-name {
-    position: absolute;
-    bottom: 20px;
-    left: 40px;
-    font-size: 32px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 5px black;
+.bottom-bar {
+    width: 100%;
+    min-height: 55px;
+    background: #111;
+    border-top: 2px solid #800000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    color: white;
+    font-size: 16px;
+    letter-spacing: 3px;
 }
 
 /* MOBILE */
@@ -142,11 +172,13 @@ header {
     .selection-screen {
         flex-direction: column;
         padding: 10px;
+        gap: 20px;
     }
 
     .character-display {
         width: 100%;
         height: 55vh;
+        flex: none;
     }
 
     .roster {
@@ -160,22 +192,14 @@ header {
         bottom: 10px;
     }
 
+    .bottom-bar {
+        padding: 0 15px;
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
 }
 
 </style>
-    .bottom-bar {
-    width: 100%;
-    height: 55px;
-    background: #111;
-    border-top: 2px solid #800000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
-    color: white;
-    font-size: 16px;
-    letter-spacing: 3px;
-}
 </head>
 
 <body>
@@ -184,6 +208,8 @@ header {
     CHARACTER SELECT
 </header>
 
+<!-- MAIN SELECTION SCREEN -->
+
 <div class="selection-screen">
 
     <!-- LARGE CHARACTER PREVIEW -->
@@ -191,29 +217,25 @@ header {
     <div class="character-display">
 
         <img src="character11.png"
-             class="active" id="preview1">
+             class="active" id="preview1" alt="Character 1">
 
         <img src="Stamoulović11.png"
-             id="preview2">
+             id="preview2" alt="Stamoulović">
 
         <img src="characters/character3.png"
-             id="preview3">
+             id="preview3" alt="Character 3">
 
         <img src="characters/character4.png"
-             id="preview4">
+             id="preview4" alt="Character 4">
 
         <img src="characters/character5.png"
-             id="preview5">
+             id="preview5" alt="Character 5">
 
         <div class="character-name" id="characterName">
             Character 1
-       </div> <!-- End of selection-screen -->
+        </div>
 
-    <div>
-    
-</div>
-        
-    
+    </div>
 
     <!-- CHARACTER ROSTER -->
 
@@ -247,6 +269,12 @@ header {
 
 </div>
 
+<!-- BOTTOM BAR -->
+
+<div class="bottom-bar">
+    <span>SELECTED CHARACTER</span>
+    <span>OPTIONS</span>
+</div>
 
 <script>
 
@@ -261,7 +289,6 @@ const names = [
 ];
 
 let currentCharacter = 1;
-
 
 /* CHANGE CHARACTER PREVIEW */
 
@@ -295,7 +322,6 @@ function showCharacter(number) {
         });
 }
 
-
 /* MOUSE NAVIGATION */
 
 document.querySelectorAll(".character-option")
@@ -306,7 +332,6 @@ document.querySelectorAll(".character-option")
         });
 
     });
-
 
 /* KEYBOARD NAVIGATION */
 
