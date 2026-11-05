@@ -9,9 +9,6 @@
 <title>Character Select</title>
 
 <style>
-
-/* GENERAL */
-
 * {
     box-sizing: border-box;
 }
@@ -163,11 +160,7 @@ header {
     letter-spacing: 3px;
 }
 
-/* MUSIC CONTROLS */
-
-.music-container {
-    text-align: center;
-}
+/* MUSIC BUTTON */
 
 .music-button {
     background: #180000;
@@ -187,6 +180,8 @@ header {
 .music-button:active {
     transform: scale(0.96);
 }
+
+/* MUSIC STATUS */
 
 .music-status {
     font-size: 11px;
@@ -240,7 +235,6 @@ header {
         padding: 15px 25px;
         min-height: 48px;
     }
-
 }
 
 </style>
@@ -253,7 +247,6 @@ header {
 <header>
     CHARACTER SELECT
 </header>
-
 
 <!-- MAIN SELECTION SCREEN -->
 
@@ -290,44 +283,33 @@ header {
 
     </div>
 
-
     <!-- CHARACTER ROSTER -->
 
     <div class="roster">
 
         <div class="character-option selected"
              data-character="1">
-
             <img src="character1.png" alt="Character 1">
-
         </div>
 
         <div class="character-option"
              data-character="2">
-
             <img src="Stamoulović10.png" alt="Stamoulović">
-
         </div>
 
         <div class="character-option"
              data-character="3">
-
             <img src="Doudoukass1.png" alt="Doudoukass">
-
         </div>
 
         <div class="character-option"
              data-character="4">
-
             <img src="Georgakas10.png" alt="Georgakas">
-
         </div>
 
         <div class="character-option"
              data-character="5">
-
             <img src="characters/character5.png" alt="Character 5">
-
         </div>
 
         <div class="empty-slot"></div>
@@ -335,7 +317,6 @@ header {
     </div>
 
 </div>
-
 
 <!-- BOTTOM BAR -->
 
@@ -345,53 +326,42 @@ header {
 
     <span>OPTIONS</span>
 
-    <div class="music-container">
+    <div style="text-align:center;">
 
-        <button
-            class="music-button"
-            id="musicButton"
-            type="button">
-
+        <button class="music-button" id="musicButton">
             ▶ PLAY MUSIC
-
         </button>
 
         <div class="music-status" id="musicStatus">
-            MUSIC READY
+            CLICK ANYWHERE TO START MUSIC
         </div>
 
     </div>
 
 </div>
 
-
 <!-- CHARACTER SWITCH SOUND -->
 
-<audio
-    id="switchSound"
-    src="charswitch.mp3"
-    preload="auto">
+<audio id="switchSound"
+       src="charswitch.mp3"
+       preload="auto">
 </audio>
-
 
 <!-- BACKGROUND MUSIC -->
 
-<audio
-    id="backgroundMusic"
-    preload="none"
-    loop
-    playsinline>
+<audio id="backgroundMusic"
+       preload="auto"
+       loop
+       playsinline>
 </audio>
-
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
 
-
-/* =====================================
+/* ==================================
    CHARACTER INFORMATION
-===================================== */
+================================== */
 
 const names = [
     "Character 1",
@@ -419,51 +389,41 @@ const options =
     document.querySelectorAll(".character-option");
 
 
-/* =====================================
+/* ==================================
    CHARACTER SWITCH SOUND
-===================================== */
+================================== */
 
 function playSwitchSound() {
 
     switchSound.currentTime = 0;
 
     switchSound.play().catch(function(error) {
-
         console.log("Switch sound unavailable:", error);
-
     });
 
 }
 
 
-/* =====================================
-   CHANGE CHARACTER
-===================================== */
+/* ==================================
+   CHANGE CHARACTER PREVIEW
+================================== */
 
 function showCharacter(number) {
 
-    if (number < 1 || number > names.length) {
-        return;
-    }
+    if (number < 1 || number > names.length) return;
 
-    if (number === currentCharacter) {
-        return;
-    }
+    if (number === currentCharacter) return;
 
     currentCharacter = number;
 
     playSwitchSound();
 
-
-    // Hide all character previews
+    // Hide all previews
 
     document.querySelectorAll(".character-display img")
         .forEach(function(image) {
-
             image.classList.remove("active");
-
         });
-
 
     // Show selected preview
 
@@ -471,17 +431,13 @@ function showCharacter(number) {
         document.getElementById("preview" + number);
 
     if (preview) {
-
         preview.classList.add("active");
-
     }
-
 
     // Update character name
 
     document.getElementById("characterName").textContent =
         names[number - 1];
-
 
     // Update selected portrait
 
@@ -497,43 +453,26 @@ function showCharacter(number) {
 }
 
 
-/* =====================================
-   MOUSE HOVER NAVIGATION
-===================================== */
+/* ==================================
+   MOUSE AND TOUCH NAVIGATION
+================================== */
 
 options.forEach(function(option) {
 
     option.addEventListener("mouseenter", function() {
-
-        showCharacter(
-            Number(option.dataset.character)
-        );
-
+        showCharacter(Number(option.dataset.character));
     });
-
-});
-
-
-/* =====================================
-   CLICK AND TOUCH NAVIGATION
-===================================== */
-
-options.forEach(function(option) {
 
     option.addEventListener("click", function() {
-
-        showCharacter(
-            Number(option.dataset.character)
-        );
-
+        showCharacter(Number(option.dataset.character));
     });
 
 });
 
 
-/* =====================================
+/* ==================================
    KEYBOARD NAVIGATION
-===================================== */
+================================== */
 
 document.addEventListener("keydown", function(event) {
 
@@ -542,202 +481,161 @@ document.addEventListener("keydown", function(event) {
     switch(event.key) {
 
         case "ArrowRight":
-
             if (currentCharacter % 2 === 1) {
-
                 next = currentCharacter + 1;
-
             }
-
             break;
-
 
         case "ArrowLeft":
-
             if (currentCharacter % 2 === 0) {
-
                 next = currentCharacter - 1;
-
             }
-
             break;
-
 
         case "ArrowDown":
-
             next = currentCharacter + 2;
-
             break;
-
 
         case "ArrowUp":
-
             next = currentCharacter - 2;
-
             break;
 
-
         default:
-
             return;
-
     }
 
     event.preventDefault();
 
     if (next >= 1 && next <= names.length) {
-
         showCharacter(next);
-
     }
 
 });
 
 
-/* =====================================
-   BACKGROUND MUSIC SYSTEM
-===================================== */
+/* ==================================
+   BACKGROUND MUSIC
+================================== */
 
-// This is the original filename.
-// The file must be in the SAME folder as index.html.
+// Your confirmed working music file
 
 const musicFilename =
     "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3";
 
-// Encode the filename safely for GitHub Pages.
-
 backgroundMusic.src = encodeURIComponent(musicFilename);
-
 backgroundMusic.volume = 0.3;
 
+let musicStarted = false;
+let musicStarting = false;
 
-/* =====================================
-   MUSIC BUTTON
-===================================== */
 
-let musicIsLoading = false;
+// START MUSIC
+
+async function startMusic() {
+
+    if (musicStarted || musicStarting) return;
+
+    musicStarting = true;
+
+    musicStatus.textContent = "LOADING MUSIC...";
+
+    try {
+
+        await backgroundMusic.play();
+
+        musicStarted = true;
+
+        musicButton.textContent = "⏸ PAUSE MUSIC";
+        musicStatus.textContent = "NOW PLAYING";
+
+    } catch (error) {
+
+        console.error("Music error:", error);
+
+        musicStatus.textContent = "MUSIC COULD NOT START";
+
+    } finally {
+
+        musicStarting = false;
+
+    }
+
+}
+
+
+// START MUSIC ON FIRST CLICK ANYWHERE
+
+document.addEventListener("click", function() {
+
+    if (!musicStarted && !musicStarting) {
+        startMusic();
+    }
+
+});
+
+
+// MUSIC BUTTON: PLAY / PAUSE
 
 musicButton.addEventListener("click", async function() {
 
-    // Prevent repeated clicks while loading
+    // If music hasn't started yet, start it
 
-    if (musicIsLoading) {
+    if (!musicStarted) {
+        await startMusic();
         return;
     }
 
-
-    // Pause music if it is already playing
+    // Pause music
 
     if (!backgroundMusic.paused) {
 
         backgroundMusic.pause();
 
-        return;
+    } else {
 
-    }
+        // Resume music
 
+        try {
 
-    // Start loading
+            await backgroundMusic.play();
 
-    musicIsLoading = true;
+        } catch (error) {
 
-    musicButton.textContent = "LOADING...";
+            console.error("Music error:", error);
+            musicStatus.textContent = "MUSIC COULD NOT RESUME";
 
-    musicStatus.textContent = "LOADING MUSIC...";
-
-
-    try {
-
-        // IMPORTANT:
-        // Call play() directly from the button interaction.
-        // Do not call load() here.
-
-        await backgroundMusic.play();
-
-        musicButton.textContent = "⏸ PAUSE MUSIC";
-
-        musicStatus.textContent = "NOW PLAYING";
-
-    }
-
-    catch(error) {
-
-        console.error("Background music error:", error);
-
-        musicButton.textContent = "▶ PLAY MUSIC";
-
-        musicStatus.textContent =
-            "PLAYBACK FAILED: " + error.message;
-
-    }
-
-    finally {
-
-        musicIsLoading = false;
+        }
 
     }
 
 });
 
 
-/* =====================================
-   MUSIC EVENT HANDLERS
-===================================== */
+// MUSIC EVENTS
 
 backgroundMusic.addEventListener("playing", function() {
 
     musicButton.textContent = "⏸ PAUSE MUSIC";
-
     musicStatus.textContent = "NOW PLAYING";
 
 });
 
-
 backgroundMusic.addEventListener("pause", function() {
 
     musicButton.textContent = "▶ PLAY MUSIC";
-
     musicStatus.textContent = "MUSIC PAUSED";
 
 });
 
-
-backgroundMusic.addEventListener("waiting", function() {
-
-    musicStatus.textContent = "BUFFERING...";
-
-});
-
-
 backgroundMusic.addEventListener("error", function() {
 
-    const errorCode =
-        backgroundMusic.error
-            ? backgroundMusic.error.code
-            : "UNKNOWN";
-
-    console.error(
-        "Audio loading error:",
-        errorCode,
-        backgroundMusic.currentSrc
-    );
-
-    musicButton.textContent = "▶ PLAY MUSIC";
-
     musicStatus.textContent =
-        "AUDIO ERROR: " + errorCode;
+        "AUDIO ERROR: " +
+        (backgroundMusic.error?.code || "UNKNOWN");
+
+    console.error(backgroundMusic.error);
 
 });
-
-
-/* =====================================
-   INITIAL STATE
-===================================== */
-
-musicButton.textContent = "▶ PLAY MUSIC";
-
-musicStatus.textContent = "MUSIC READY";
-
 
 });
 
