@@ -203,7 +203,7 @@ header {
 
 </style>
 </head>
-
+    <audio id="switchSound" src="music/character-switch.mp3" preload="auto"></audio>
 <body>
 
 <header>
@@ -292,6 +292,12 @@ const names = [
 
 let currentCharacter = 1;
 
+    const switchSound = document.getElementById("switchSound");
+
+function playSwitchSound() {
+    switchSound.currentTime = 0;
+    switchSound.play().catch(() => {});
+}
 /* CHANGE CHARACTER PREVIEW */
 
 function showCharacter(number) {
@@ -299,6 +305,7 @@ function showCharacter(number) {
     if (number < 1 || number > 5) return;
 
     currentCharacter = number;
+    playSwitchSound();
 
     // Hide all previews
     document.querySelectorAll(".character-display img")
