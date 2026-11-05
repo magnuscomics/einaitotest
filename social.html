@@ -499,6 +499,13 @@ document.addEventListener("pointerdown", startBackgroundMusic);
 
 
 </script>
-
+<button onclick="
+  const music = document.getElementById('backgroundMusic');
+  music.src = 'Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3';
+  music.play().then(() => console.log('Music playing'))
+    .catch(error => console.error('Music error:', error));
+">
+  Test Music
+</button>
 </body>
 </html>
