@@ -445,40 +445,38 @@ document.addEventListener("keydown", function(event) {
 
 /* RANDOM BACKGROUND MUSIC */
 
+
+/* RANDOM BACKGROUND MUSIC */
+
 const musicTracks = [
-
     "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3",
-    <!--"music/song2.mp3",-->
-    <!--"music/song3.mp3",-->
-    <!--"music/song4.mp3"-->
-
+    "music/song2.mp3",
+    "music/song3.mp3",
+    "music/song4.mp3"
 ];
 
-// Pick random song
+const backgroundMusic = document.getElementById("backgroundMusic");
 
-const randomTrack = Math.floor(
-    Math.random() * musicTracks.length
-);
-
-// Set music
+const randomTrack = Math.floor(Math.random() * musicTracks.length);
 
 backgroundMusic.src = musicTracks[randomTrack];
-
-// Set volume
-
 backgroundMusic.volume = 0.3;
 
-// Start music after first interaction if autoplay is blocked
+// Start music after the visitor clicks or presses a key
 
 function startBackgroundMusic() {
 
-    backgroundMusic.play().catch(() => {
-        console.log("Music playback was blocked.");
-    });
+    if (backgroundMusic.paused) {
+        backgroundMusic.play().catch(error => {
+            console.log("Music playback error:", error);
+        });
+    }
 
 }
 
-startBackgroundMusic();
+document.addEventListener("click", startBackgroundMusic, { once: true });
+document.addEventListener("keydown", startBackgroundMusic, { once: true });
+
 
 document.addEventListener(
     "pointerdown",
