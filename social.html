@@ -287,6 +287,7 @@ header {
 
 <script>
 
+
 document.addEventListener("DOMContentLoaded", function() {
 
 /* CHARACTER INFORMATION */
@@ -303,7 +304,6 @@ let currentCharacter = 1;
 
 const switchSound = document.getElementById("switchSound");
 const backgroundMusic = document.getElementById("backgroundMusic");
-
 const options = document.querySelectorAll(".character-option");
 
 /* PLAY SWITCH SOUND */
@@ -313,7 +313,7 @@ function playSwitchSound() {
     switchSound.currentTime = 0;
 
     switchSound.play().catch(() => {
-        // Browser may block sound until interaction.
+        console.log("Character switch sound unavailable.");
     });
 
 }
@@ -337,17 +337,20 @@ function showCharacter(number) {
             image.classList.remove("active");
         });
 
-    // Show selected character
+    // Show selected preview
 
-    document.getElementById("preview" + number)
-        .classList.add("active");
+    const preview = document.getElementById("preview" + number);
+
+    if (preview) {
+        preview.classList.add("active");
+    }
 
     // Update character name
 
     document.getElementById("characterName").textContent =
         names[number - 1];
 
-    // Update highlighted portrait
+    // Update selected portrait
 
     options.forEach(option => {
 
@@ -364,7 +367,7 @@ function showCharacter(number) {
 
 options.forEach(option => {
 
-    option.addEventListener("mouseenter", () => {
+    option.addEventListener("mouseenter", function() {
 
         showCharacter(Number(option.dataset.character));
 
@@ -372,11 +375,11 @@ options.forEach(option => {
 
 });
 
-/* CLICK NAVIGATION */
+/* MOUSE CLICK NAVIGATION */
 
 options.forEach(option => {
 
-    option.addEventListener("click", () => {
+    option.addEventListener("click", function() {
 
         showCharacter(Number(option.dataset.character));
 
@@ -394,7 +397,7 @@ document.addEventListener("keydown", function(event) {
 
         case "ArrowRight":
 
-            // Move to the right column
+            // Move right
 
             if (currentCharacter % 2 === 1) {
                 next = currentCharacter + 1;
@@ -404,7 +407,7 @@ document.addEventListener("keydown", function(event) {
 
         case "ArrowLeft":
 
-            // Move to the left column
+            // Move left
 
             if (currentCharacter % 2 === 0) {
                 next = currentCharacter - 1;
@@ -414,20 +417,18 @@ document.addEventListener("keydown", function(event) {
 
         case "ArrowDown":
 
+            // Move down
+
             next = currentCharacter + 2;
 
             break;
 
         case "ArrowUp":
 
+            // Move up
+
             next = currentCharacter - 2;
 
-            break;
-
-        case "Enter":
-        case " ":
-
-            event.preventDefault();
             break;
 
         default:
@@ -445,9 +446,6 @@ document.addEventListener("keydown", function(event) {
 
 /* RANDOM BACKGROUND MUSIC */
 
-
-/* RANDOM BACKGROUND MUSIC */
-
 const musicTracks = [
     "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3",
     "music/song2.mp3",
@@ -455,36 +453,50 @@ const musicTracks = [
     "music/song4.mp3"
 ];
 
-const backgroundMusic = document.getElementById("backgroundMusic");
+// Choose random track
 
-const randomTrack = Math.floor(Math.random() * musicTracks.length);
+const randomTrack = Math.floor(
+    Math.random() * musicTracks.length
+);
+
+// Set music source
 
 backgroundMusic.src = musicTracks[randomTrack];
+
+// Set volume
+
 backgroundMusic.volume = 0.3;
 
-// Start music after the visitor clicks or presses a key
+// Start music after user interaction
 
 function startBackgroundMusic() {
 
-    if (backgroundMusic.paused) {
-        backgroundMusic.play().catch(error => {
-            console.log("Music playback error:", error);
-        });
-    }
+    if (!backgroundMusic.paused) return;
+
+    backgroundMusic.play().then(() => {
+
+        // Remove listeners once music successfully starts
+
+        document.removeEventListener("click", startBackgroundMusic);
+        document.removeEventListener("keydown", startBackgroundMusic);
+        document.removeEventListener("pointerdown", startBackgroundMusic);
+
+    }).catch(error => {
+
+        console.log("Background music error:", error);
+
+    });
 
 }
 
-document.addEventListener("click", startBackgroundMusic, { once: true });
-document.addEventListener("keydown", startBackgroundMusic, { once: true });
+// Wait for user interaction
 
-
-document.addEventListener(
-    "pointerdown",
-    startBackgroundMusic,
-    { once: true }
-);
+document.addEventListener("click", startBackgroundMusic);
+document.addEventListener("keydown", startBackgroundMusic);
+document.addEventListener("pointerdown", startBackgroundMusic);
 
 });
+
 
 </script>
 
