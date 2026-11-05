@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +8,6 @@
 <title>Character Select</title>
 
 <style>
-
-/* GENERAL */
-
 * {
     box-sizing: border-box;
 }
@@ -24,8 +20,6 @@ body {
     overflow-x: hidden;
 }
 
-/* HEADER */
-
 header {
     text-align: center;
     padding: 25px;
@@ -35,8 +29,6 @@ header {
     border-bottom: 2px solid #660000;
 }
 
-/* MAIN LAYOUT */
-
 .selection-screen {
     display: flex;
     min-height: 85vh;
@@ -45,8 +37,6 @@ header {
     padding: 30px;
     gap: 30px;
 }
-
-/* CHARACTER DISPLAY */
 
 .character-display {
     position: relative;
@@ -61,13 +51,11 @@ header {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-
     max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
     object-fit: contain;
-
     opacity: 0;
     transition: opacity 0.25s ease;
     pointer-events: none;
@@ -76,8 +64,6 @@ header {
 .character-display img.active {
     opacity: 1;
 }
-
-/* CHARACTER NAME */
 
 .character-name {
     position: absolute;
@@ -90,18 +76,13 @@ header {
     z-index: 3;
 }
 
-/* CHARACTER ROSTER */
-
 .roster {
     width: 300px;
     flex-shrink: 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
-    border: none;
 }
-
-/* CHARACTER OPTIONS */
 
 .character-option {
     width: 100%;
@@ -114,13 +95,9 @@ header {
     transition: 0.15s;
 }
 
-/* LEFT COLUMN OFFSET */
-
 .character-option:nth-child(odd) {
     transform: translateY(50%);
 }
-
-/* PORTRAIT IMAGES */
 
 .character-option img {
     width: 100%;
@@ -130,8 +107,6 @@ header {
     filter: grayscale(70%) brightness(0.7);
     transition: 0.2s;
 }
-
-/* HOVER AND SELECTION */
 
 .character-option:hover,
 .character-option.selected {
@@ -144,15 +119,11 @@ header {
     filter: grayscale(0%) brightness(1);
 }
 
-/* EMPTY SLOT */
-
 .empty-slot {
     background: #080808;
     border: 1px solid #292929;
     aspect-ratio: 1 / 1;
 }
-
-/* BOTTOM BAR */
 
 .bottom-bar {
     width: 100%;
@@ -168,10 +139,24 @@ header {
     letter-spacing: 3px;
 }
 
-/* MOBILE */
+/* MUSIC BUTTON */
+
+.music-button {
+    background: #180000;
+    border: 2px solid #800000;
+    color: white;
+    padding: 12px 22px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.music-button:hover {
+    background: #800000;
+}
 
 @media (max-width: 750px) {
-
     .selection-screen {
         flex-direction: column;
         padding: 10px;
@@ -196,12 +181,17 @@ header {
     }
 
     .bottom-bar {
-        padding: 0 15px;
+        padding: 15px;
         font-size: 12px;
         letter-spacing: 2px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    header {
+        font-size: 23px;
     }
 }
-
 </style>
 </head>
 
@@ -212,8 +202,6 @@ header {
 </header>
 
 <div class="selection-screen">
-
-    <!-- LARGE CHARACTER PREVIEW -->
 
     <div class="character-display">
 
@@ -237,8 +225,6 @@ header {
         </div>
 
     </div>
-
-    <!-- CHARACTER ROSTER -->
 
     <div class="roster">
 
@@ -268,25 +254,23 @@ header {
 
 </div>
 
-<!-- BOTTOM BAR -->
-
 <div class="bottom-bar">
+
     <span>SELECTED CHARACTER</span>
+
     <span>OPTIONS</span>
+
+    <button class="music-button" id="musicButton">
+        PLAY MUSIC
+    </button>
+
 </div>
 
-<!-- CHARACTER SWITCH SOUND -->
+<audio id="switchSound" src="charswitch.mp3" preload="auto"></audio>
 
-<audio id="switchSound"
-       src="charswitch.mp3"
-       preload="auto"></audio>
-
-<!-- BACKGROUND MUSIC -->
-
-<audio id="backgroundMusic" loop></audio>
+<audio id="backgroundMusic" preload="auto" loop playsinline></audio>
 
 <script>
-
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -304,21 +288,21 @@ let currentCharacter = 1;
 
 const switchSound = document.getElementById("switchSound");
 const backgroundMusic = document.getElementById("backgroundMusic");
+const musicButton = document.getElementById("musicButton");
+
 const options = document.querySelectorAll(".character-option");
 
-/* PLAY SWITCH SOUND */
+/* CHARACTER SWITCH SOUND */
 
 function playSwitchSound() {
 
     switchSound.currentTime = 0;
 
-    switchSound.play().catch(() => {
-        console.log("Character switch sound unavailable.");
-    });
+    switchSound.play().catch(() => {});
 
 }
 
-/* CHANGE CHARACTER PREVIEW */
+/* CHANGE CHARACTER */
 
 function showCharacter(number) {
 
@@ -330,14 +314,10 @@ function showCharacter(number) {
 
     playSwitchSound();
 
-    // Hide all previews
-
     document.querySelectorAll(".character-display img")
         .forEach(image => {
             image.classList.remove("active");
         });
-
-    // Show selected preview
 
     const preview = document.getElementById("preview" + number);
 
@@ -345,12 +325,8 @@ function showCharacter(number) {
         preview.classList.add("active");
     }
 
-    // Update character name
-
     document.getElementById("characterName").textContent =
         names[number - 1];
-
-    // Update selected portrait
 
     options.forEach(option => {
 
@@ -363,26 +339,16 @@ function showCharacter(number) {
 
 }
 
-/* MOUSE HOVER NAVIGATION */
+/* MOUSE AND TOUCH SELECTION */
 
 options.forEach(option => {
 
     option.addEventListener("mouseenter", function() {
-
         showCharacter(Number(option.dataset.character));
-
     });
 
-});
-
-/* MOUSE CLICK NAVIGATION */
-
-options.forEach(option => {
-
     option.addEventListener("click", function() {
-
         showCharacter(Number(option.dataset.character));
-
     });
 
 });
@@ -396,44 +362,27 @@ document.addEventListener("keydown", function(event) {
     switch(event.key) {
 
         case "ArrowRight":
-
-            // Move right
-
             if (currentCharacter % 2 === 1) {
                 next = currentCharacter + 1;
             }
-
             break;
 
         case "ArrowLeft":
-
-            // Move left
-
             if (currentCharacter % 2 === 0) {
                 next = currentCharacter - 1;
             }
-
             break;
 
         case "ArrowDown":
-
-            // Move down
-
             next = currentCharacter + 2;
-
             break;
 
         case "ArrowUp":
-
-            // Move up
-
             next = currentCharacter - 2;
-
             break;
 
         default:
             return;
-
     }
 
     event.preventDefault();
@@ -444,7 +393,7 @@ document.addEventListener("keydown", function(event) {
 
 });
 
-/* RANDOM BACKGROUND MUSIC */
+/* BACKGROUND MUSIC */
 
 const musicTracks = [
     "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3",
@@ -453,59 +402,118 @@ const musicTracks = [
     "music/song4.mp3"
 ];
 
-// Choose random track
+/* RANDOM TRACK */
 
 const randomTrack = Math.floor(
     Math.random() * musicTracks.length
 );
 
-// Set music source
-
 backgroundMusic.src = musicTracks[randomTrack];
-
-// Set volume
 
 backgroundMusic.volume = 0.3;
 
-// Start music after user interaction
+/* UPDATE BUTTON */
 
-function startBackgroundMusic() {
+function updateMusicButton() {
 
-    if (!backgroundMusic.paused) return;
-
-    backgroundMusic.play().then(() => {
-
-        // Remove listeners once music successfully starts
-
-        document.removeEventListener("click", startBackgroundMusic);
-        document.removeEventListener("keydown", startBackgroundMusic);
-        document.removeEventListener("pointerdown", startBackgroundMusic);
-
-    }).catch(error => {
-
-        console.log("Background music error:", error);
-
-    });
+    musicButton.textContent = backgroundMusic.paused
+        ? "PLAY MUSIC"
+        : "PAUSE MUSIC";
 
 }
 
-// Wait for user interaction
+/* START MUSIC */
 
-document.addEventListener("click", startBackgroundMusic);
-document.addEventListener("keydown", startBackgroundMusic);
-document.addEventListener("pointerdown", startBackgroundMusic);
+async function startMusic() {
+
+    try {
+
+        await backgroundMusic.play();
+
+        updateMusicButton();
+
+    } catch (error) {
+
+        console.log("Music playback blocked:", error);
+
+        musicButton.textContent = "TAP TO PLAY";
+
+    }
+
+}
+
+/* MUSIC BUTTON */
+
+musicButton.addEventListener("click", async function() {
+
+    if (backgroundMusic.paused) {
+
+        await startMusic();
+
+    } else {
+
+        backgroundMusic.pause();
+
+        updateMusicButton();
+
+    }
 
 });
 
+/*
+ MOBILE AUDIO UNLOCK
+
+ Try starting music directly during the first
+ real user interaction with the page.
+*/
+
+let musicStarted = false;
+
+async function unlockMusic() {
+
+    if (musicStarted) return;
+
+    try {
+
+        await backgroundMusic.play();
+
+        musicStarted = true;
+
+        updateMusicButton();
+
+        document.removeEventListener("touchstart", unlockMusic);
+        document.removeEventListener("click", unlockMusic);
+        document.removeEventListener("keydown", unlockMusic);
+
+    } catch (error) {
+
+        console.log("Waiting for another interaction:", error);
+
+    }
+
+}
+
+/* FIRST USER INTERACTION */
+
+document.addEventListener("touchstart", unlockMusic, {
+    passive: true
+});
+
+document.addEventListener("click", unlockMusic);
+
+document.addEventListener("keydown", unlockMusic);
+
+/* KEEP BUTTON UPDATED */
+
+backgroundMusic.addEventListener("play", updateMusicButton);
+
+backgroundMusic.addEventListener("pause", updateMusicButton);
+
+backgroundMusic.addEventListener("ended", updateMusicButton);
+
+});
 
 </script>
-<button onclick="
-  const music = document.getElementById('backgroundMusic');
-  music.src = 'Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3';
-  music.play().then(() => console.log('Music playing'))
-    .catch(error => console.error('Music error:', error));
-">
-  Test Music
-</button>
+
 </body>
 </html>
