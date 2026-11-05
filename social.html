@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -210,8 +211,6 @@ header {
     CHARACTER SELECT
 </header>
 
-<!-- MAIN SELECTION SCREEN -->
-
 <div class="selection-screen">
 
     <!-- LARGE CHARACTER PREVIEW -->
@@ -243,23 +242,23 @@ header {
 
     <div class="roster">
 
-        <div class="character-option selected">
+        <div class="character-option selected" data-character="1">
             <img src="character1.png" alt="Character 1">
         </div>
 
-        <div class="character-option">
+        <div class="character-option" data-character="2">
             <img src="Stamoulović10.png" alt="Stamoulović">
         </div>
 
-        <div class="character-option">
+        <div class="character-option" data-character="3">
             <img src="Doudoukass1.png" alt="Doudoukass">
         </div>
 
-        <div class="character-option">
+        <div class="character-option" data-character="4">
             <img src="characters/character4.png" alt="Character 4">
         </div>
 
-        <div class="character-option">
+        <div class="character-option" data-character="5">
             <img src="characters/character5.png" alt="Character 5">
         </div>
 
@@ -282,7 +281,13 @@ header {
        src="charswitch.mp3"
        preload="auto"></audio>
 
+<!-- BACKGROUND MUSIC -->
+
+<audio id="backgroundMusic" loop></audio>
+
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
 
 /* CHARACTER INFORMATION */
 
@@ -297,6 +302,9 @@ const names = [
 let currentCharacter = 1;
 
 const switchSound = document.getElementById("switchSound");
+const backgroundMusic = document.getElementById("backgroundMusic");
+
+const options = document.querySelectorAll(".character-option");
 
 /* PLAY SWITCH SOUND */
 
@@ -305,7 +313,7 @@ function playSwitchSound() {
     switchSound.currentTime = 0;
 
     switchSound.play().catch(() => {
-        // Browser may block sound until the visitor interacts.
+        // Browser may block sound until interaction.
     });
 
 }
@@ -314,9 +322,8 @@ function playSwitchSound() {
 
 function showCharacter(number) {
 
-    if (number < 1 || number > 5) return;
+    if (number < 1 || number > names.length) return;
 
-    // Don't play sound if the character hasn't changed
     if (number === currentCharacter) return;
 
     currentCharacter = number;
@@ -324,40 +331,58 @@ function showCharacter(number) {
     playSwitchSound();
 
     // Hide all previews
+
     document.querySelectorAll(".character-display img")
         .forEach(image => {
             image.classList.remove("active");
         });
 
     // Show selected character
+
     document.getElementById("preview" + number)
         .classList.add("active");
 
     // Update character name
+
     document.getElementById("characterName").textContent =
         names[number - 1];
 
     // Update highlighted portrait
-    document.querySelectorAll(".character-option")
-        .forEach((option, index) => {
-            option.classList.toggle(
-                "selected",
-                index === number - 1
-            );
-        });
+
+    options.forEach(option => {
+
+        option.classList.toggle(
+            "selected",
+            Number(option.dataset.character) === number
+        );
+
+    });
 
 }
 
-/* MOUSE NAVIGATION */
+/* MOUSE HOVER NAVIGATION */
 
-document.querySelectorAll(".character-option")
-    .forEach((option, index) => {
+options.forEach(option => {
 
-        option.addEventListener("mouseenter", () => {
-            showCharacter(index + 1);
-        });
+    option.addEventListener("mouseenter", () => {
+
+        showCharacter(Number(option.dataset.character));
 
     });
+
+});
+
+/* CLICK NAVIGATION */
+
+options.forEach(option => {
+
+    option.addEventListener("click", () => {
+
+        showCharacter(Number(option.dataset.character));
+
+    });
+
+});
 
 /* KEYBOARD NAVIGATION */
 
@@ -368,62 +393,102 @@ document.addEventListener("keydown", function(event) {
     switch(event.key) {
 
         case "ArrowRight":
-            next = currentCharacter % 2 === 1
-                ? currentCharacter + 1
-                : currentCharacter;
+
+            // Move to the right column
+
+            if (currentCharacter % 2 === 1) {
+                next = currentCharacter + 1;
+            }
+
             break;
 
         case "ArrowLeft":
-            next = currentCharacter % 2 === 0
-                ? currentCharacter - 1
-                : currentCharacter;
+
+            // Move to the left column
+
+            if (currentCharacter % 2 === 0) {
+                next = currentCharacter - 1;
+            }
+
             break;
 
         case "ArrowDown":
+
             next = currentCharacter + 2;
+
             break;
 
         case "ArrowUp":
+
             next = currentCharacter - 2;
+
+            break;
+
+        case "Enter":
+        case " ":
+
+            event.preventDefault();
             break;
 
         default:
             return;
+
     }
 
     event.preventDefault();
 
-    if (next >= 1 && next <= 5) {
+    if (next >= 1 && next <= names.length) {
         showCharacter(next);
     }
 
 });
+
 /* RANDOM BACKGROUND MUSIC */
 
 const musicTracks = [
-    "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3
-",
+
+    "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3",
     "music/song2.mp3",
     "music/song3.mp3",
     "music/song4.mp3"
+
 ];
 
-const backgroundMusic = document.getElementById("backgroundMusic");
+// Pick random song
 
-// Pick a random song
-const randomTrack = Math.floor(Math.random() * musicTracks.length);
+const randomTrack = Math.floor(
+    Math.random() * musicTracks.length
+);
 
-// Set the song
+// Set music
+
 backgroundMusic.src = musicTracks[randomTrack];
 
 // Set volume
+
 backgroundMusic.volume = 0.3;
 
-// Try to play
-backgroundMusic.play().catch(() => {
-    console.log("Music will start after user interaction.");
+// Start music after first interaction if autoplay is blocked
+
+function startBackgroundMusic() {
+
+    backgroundMusic.play().catch(() => {
+        console.log("Music playback was blocked.");
+    });
+
+}
+
+startBackgroundMusic();
+
+document.addEventListener(
+    "pointerdown",
+    startBackgroundMusic,
+    { once: true }
+);
+
 });
+
 </script>
-<audio id="backgroundMusic" loop></audio>
+
 </body>
 </html>
