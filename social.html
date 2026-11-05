@@ -163,18 +163,19 @@ header {
     letter-spacing: 3px;
 }
 
-/* MUSIC BUTTON */
+/* MUSIC CONTROLS */
+
+.music-container {
+    text-align: center;
+}
 
 .music-button {
     background: #180000;
     border: 2px solid #800000;
     color: white;
-
     padding: 15px 25px;
-
     font-size: 14px;
     letter-spacing: 2px;
-
     cursor: pointer;
     transition: 0.2s;
 }
@@ -186,8 +187,6 @@ header {
 .music-button:active {
     transform: scale(0.96);
 }
-
-/* MUSIC STATUS */
 
 .music-status {
     font-size: 11px;
@@ -346,10 +345,15 @@ header {
 
     <span>OPTIONS</span>
 
-    <div style="text-align:center;">
+    <div class="music-container">
 
-        <button class="music-button" id="musicButton">
+        <button
+            class="music-button"
+            id="musicButton"
+            type="button">
+
             ▶ PLAY MUSIC
+
         </button>
 
         <div class="music-status" id="musicStatus">
@@ -363,18 +367,20 @@ header {
 
 <!-- CHARACTER SWITCH SOUND -->
 
-<audio id="switchSound"
-       src="charswitch.mp3"
-       preload="auto">
+<audio
+    id="switchSound"
+    src="charswitch.mp3"
+    preload="auto">
 </audio>
 
 
 <!-- BACKGROUND MUSIC -->
 
-<audio id="backgroundMusic"
-       preload="auto"
-       loop
-       playsinline>
+<audio
+    id="backgroundMusic"
+    preload="none"
+    loop
+    playsinline>
 </audio>
 
 
@@ -383,9 +389,9 @@ header {
 document.addEventListener("DOMContentLoaded", function() {
 
 
-/* ==================================
+/* =====================================
    CHARACTER INFORMATION
-================================== */
+===================================== */
 
 const names = [
     "Character 1",
@@ -413,36 +419,43 @@ const options =
     document.querySelectorAll(".character-option");
 
 
-/* ==================================
+/* =====================================
    CHARACTER SWITCH SOUND
-================================== */
+===================================== */
 
 function playSwitchSound() {
 
     switchSound.currentTime = 0;
 
     switchSound.play().catch(function(error) {
+
         console.log("Switch sound unavailable:", error);
+
     });
 
 }
 
 
-/* ==================================
-   CHANGE CHARACTER PREVIEW
-================================== */
+/* =====================================
+   CHANGE CHARACTER
+===================================== */
 
 function showCharacter(number) {
 
-    if (number < 1 || number > names.length) return;
+    if (number < 1 || number > names.length) {
+        return;
+    }
 
-    if (number === currentCharacter) return;
+    if (number === currentCharacter) {
+        return;
+    }
 
     currentCharacter = number;
 
     playSwitchSound();
 
-    // Hide all previews
+
+    // Hide all character previews
 
     document.querySelectorAll(".character-display img")
         .forEach(function(image) {
@@ -451,19 +464,24 @@ function showCharacter(number) {
 
         });
 
+
     // Show selected preview
 
     const preview =
         document.getElementById("preview" + number);
 
     if (preview) {
+
         preview.classList.add("active");
+
     }
+
 
     // Update character name
 
     document.getElementById("characterName").textContent =
         names[number - 1];
+
 
     // Update selected portrait
 
@@ -479,30 +497,43 @@ function showCharacter(number) {
 }
 
 
-/* ==================================
-   MOUSE AND TOUCH NAVIGATION
-================================== */
+/* =====================================
+   MOUSE HOVER NAVIGATION
+===================================== */
 
 options.forEach(function(option) {
 
     option.addEventListener("mouseenter", function() {
 
-        showCharacter(Number(option.dataset.character));
-
-    });
-
-    option.addEventListener("click", function() {
-
-        showCharacter(Number(option.dataset.character));
+        showCharacter(
+            Number(option.dataset.character)
+        );
 
     });
 
 });
 
 
-/* ==================================
+/* =====================================
+   CLICK AND TOUCH NAVIGATION
+===================================== */
+
+options.forEach(function(option) {
+
+    option.addEventListener("click", function() {
+
+        showCharacter(
+            Number(option.dataset.character)
+        );
+
+    });
+
+});
+
+
+/* =====================================
    KEYBOARD NAVIGATION
-================================== */
+===================================== */
 
 document.addEventListener("keydown", function(event) {
 
@@ -513,18 +544,24 @@ document.addEventListener("keydown", function(event) {
         case "ArrowRight":
 
             if (currentCharacter % 2 === 1) {
+
                 next = currentCharacter + 1;
+
             }
 
             break;
+
 
         case "ArrowLeft":
 
             if (currentCharacter % 2 === 0) {
+
                 next = currentCharacter - 1;
+
             }
 
             break;
+
 
         case "ArrowDown":
 
@@ -532,11 +569,13 @@ document.addEventListener("keydown", function(event) {
 
             break;
 
+
         case "ArrowUp":
 
             next = currentCharacter - 2;
 
             break;
+
 
         default:
 
@@ -547,98 +586,157 @@ document.addEventListener("keydown", function(event) {
     event.preventDefault();
 
     if (next >= 1 && next <= names.length) {
+
         showCharacter(next);
+
     }
 
 });
 
 
+/* =====================================
+   BACKGROUND MUSIC SYSTEM
+===================================== */
 
-/* ==================================
-   BACKGROUND MUSIC - GITHUB PAGES
-================================== */
+// This is the original filename.
+// The file must be in the SAME folder as index.html.
 
-const backgroundMusic =
-    document.getElementById("backgroundMusic");
+const musicFilename =
+    "Evol Intent, Mayhem & Thinktank - Broken Sword - NfS Most Wanted Soundtrack - 1080p.mp3";
 
-const musicButton =
-    document.getElementById("musicButton");
+// Encode the filename safely for GitHub Pages.
 
-const musicStatus =
-    document.getElementById("musicStatus");
+backgroundMusic.src = encodeURIComponent(musicFilename);
 
-const musicTracks = [
-    "Evol%20Intent,%20Mayhem%20%26%20Thinktank%20-%20Broken%20Sword%20-%20NfS%20Most%20Wanted%20Soundtrack%20-%201080p.mp3",
-    "music/song2.mp3",
-    "music/song3.mp3",
-    "music/song4.mp3"
-];
-
-const randomTrack = Math.floor(
-    Math.random() * musicTracks.length
-);
-
-backgroundMusic.src = musicTracks[randomTrack];
 backgroundMusic.volume = 0.3;
 
-// PLAY / PAUSE
+
+/* =====================================
+   MUSIC BUTTON
+===================================== */
+
+let musicIsLoading = false;
 
 musicButton.addEventListener("click", async function() {
+
+    // Prevent repeated clicks while loading
+
+    if (musicIsLoading) {
+        return;
+    }
+
+
+    // Pause music if it is already playing
 
     if (!backgroundMusic.paused) {
 
         backgroundMusic.pause();
+
         return;
 
     }
 
-    musicStatus.textContent = "LOADING...";
+
+    // Start loading
+
+    musicIsLoading = true;
+
+    musicButton.textContent = "LOADING...";
+
+    musicStatus.textContent = "LOADING MUSIC...";
+
 
     try {
 
+        // IMPORTANT:
+        // Call play() directly from the button interaction.
+        // Do not call load() here.
+
         await backgroundMusic.play();
 
-    } catch (error) {
+        musicButton.textContent = "⏸ PAUSE MUSIC";
 
-        console.error("Music error:", error);
+        musicStatus.textContent = "NOW PLAYING";
+
+    }
+
+    catch(error) {
+
+        console.error("Background music error:", error);
+
+        musicButton.textContent = "▶ PLAY MUSIC";
 
         musicStatus.textContent =
-            "ERROR: " + error.message;
+            "PLAYBACK FAILED: " + error.message;
+
+    }
+
+    finally {
+
+        musicIsLoading = false;
 
     }
 
 });
 
-// MUSIC EVENTS
+
+/* =====================================
+   MUSIC EVENT HANDLERS
+===================================== */
 
 backgroundMusic.addEventListener("playing", function() {
 
     musicButton.textContent = "⏸ PAUSE MUSIC";
+
     musicStatus.textContent = "NOW PLAYING";
 
 });
 
+
 backgroundMusic.addEventListener("pause", function() {
 
     musicButton.textContent = "▶ PLAY MUSIC";
+
     musicStatus.textContent = "MUSIC PAUSED";
 
 });
 
+
+backgroundMusic.addEventListener("waiting", function() {
+
+    musicStatus.textContent = "BUFFERING...";
+
+});
+
+
 backgroundMusic.addEventListener("error", function() {
 
+    const errorCode =
+        backgroundMusic.error
+            ? backgroundMusic.error.code
+            : "UNKNOWN";
+
+    console.error(
+        "Audio loading error:",
+        errorCode,
+        backgroundMusic.currentSrc
+    );
+
+    musicButton.textContent = "▶ PLAY MUSIC";
+
     musicStatus.textContent =
-        "AUDIO ERROR: " +
-        (backgroundMusic.error?.code || "UNKNOWN");
-
-    console.error(backgroundMusic.error);
+        "AUDIO ERROR: " + errorCode;
 
 });
 
 
-    musicStatus.textContent = "CANNOT LOAD MUSIC FILE";
+/* =====================================
+   INITIAL STATE
+===================================== */
 
-});
+musicButton.textContent = "▶ PLAY MUSIC";
+
+musicStatus.textContent = "MUSIC READY";
 
 
 });
