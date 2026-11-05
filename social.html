@@ -57,9 +57,9 @@ header {
 
 .character-display img {
     position: absolute;
-    top: 50%;
+    bottom: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 
     max-width: 100%;
     max-height: 100%;
@@ -129,7 +129,7 @@ header {
     filter: grayscale(70%) brightness(0.7);
     transition: 0.2s;
 }
-    
+
 /* HOVER AND SELECTION */
 
 .character-option:hover,
@@ -203,6 +203,7 @@ header {
 
 </style>
 </head>
+
 <body>
 
 <header>
@@ -247,11 +248,11 @@ header {
         </div>
 
         <div class="character-option">
-            <img src="Stamoulović10.png" alt="Character 2">
+            <img src="Stamoulović10.png" alt="Stamoulović">
         </div>
 
         <div class="character-option">
-            <img src="Doudoukass1.png" alt="Character 3">
+            <img src="Doudoukass1.png" alt="Doudoukass">
         </div>
 
         <div class="character-option">
@@ -261,8 +262,6 @@ header {
         <div class="character-option">
             <img src="characters/character5.png" alt="Character 5">
         </div>
-
-        <!-- EMPTY SIXTH SLOT -->
 
         <div class="empty-slot"></div>
 
@@ -277,6 +276,12 @@ header {
     <span>OPTIONS</span>
 </div>
 
+<!-- CHARACTER SWITCH SOUND -->
+
+<audio id="switchSound"
+       src="music/character-switch.mp3"
+       preload="auto"></audio>
+
 <script>
 
 /* CHARACTER INFORMATION */
@@ -284,26 +289,38 @@ header {
 const names = [
     "Character 1",
     "Stamoulović",
-    "Doudoukass11",
+    "Doudoukass",
     "Character 4",
     "Character 5"
 ];
 
 let currentCharacter = 1;
 
-    const switchSound = document.getElementById("switchSound");
+const switchSound = document.getElementById("switchSound");
+
+/* PLAY SWITCH SOUND */
 
 function playSwitchSound() {
+
     switchSound.currentTime = 0;
-    switchSound.play().catch(() => {});
+
+    switchSound.play().catch(() => {
+        // Browser may block sound until the visitor interacts.
+    });
+
 }
+
 /* CHANGE CHARACTER PREVIEW */
 
 function showCharacter(number) {
 
     if (number < 1 || number > 5) return;
 
+    // Don't play sound if the character hasn't changed
+    if (number === currentCharacter) return;
+
     currentCharacter = number;
+
     playSwitchSound();
 
     // Hide all previews
@@ -328,6 +345,7 @@ function showCharacter(number) {
                 index === number - 1
             );
         });
+
 }
 
 /* MOUSE NAVIGATION */
@@ -382,7 +400,6 @@ document.addEventListener("keydown", function(event) {
 });
 
 </script>
-    <audio id="switchSound" src="music/character-switch.mp3" preload="auto"></audio>
 
 </body>
 </html>
